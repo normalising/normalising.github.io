@@ -1,0 +1,31 @@
+{
+  "name": "normalising.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/normalising/normalising.github.io.git"
+  },
+  "author": "Chris Hanes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/normalising/normalising.github.io/issues"
+  },
+  "homepage": "https://normalising.github.io",
+  "dependencies": {
+    "govuk-elements-sass": "^3.1.0",
+    "govuk_frontend_toolkit": "^6.0.3",
+    "govuk_template_jinja": "^0.22.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "require-dir": "^0.3.2",
+    "run-sequence": "^1.2.2"
+  }
+}

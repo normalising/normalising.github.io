@@ -1,0 +1,74 @@
+var gulp = require('gulp');
+var clean = require('gulp-clean');
+var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
+
+
+var config = {
+  "paths": {
+    "public": "public/",
+    "assets" : "app/",
+    "govukModules": "govuk_modules/",
+    "nodeModules": "node_modules/",
+    "lib": "lib/"
+  }
+};
+
+gulp.task('clean', function () {
+  return gulp.src([config.paths.public + '/*',
+    config.paths.govukModules + '/*',
+    '.port.tmp'], {read: false})
+  .pipe(clean())
+});
+
+gulp.task('copy-toolkit', function () {
+  return gulp.src(['node_modules/govuk_frontend_toolkit/**'])
+  .pipe(gulp.dest(config.paths.govukModules + '/govuk_frontend_toolkit/'))
+});
+
+gulp.task('copy-template', function () {
+  return gulp.src(['node_modules/govuk_template_jinja/views/layouts/**'])
+  .pipe(gulp.dest(config.paths.govukModules + '/govuk_template/layouts/'))
+  .pipe(gulp.dest(config.paths.lib))
+});
+
+gulp.task('copy-template-assets', function () {
+  return gulp.src(['node_modules/govuk_template_jinja/assets/**'])
+  .pipe(gulp.dest(config.paths.public + '/govuk_template/assets/'))
+});
+
+gulp.task('copy-template-assets2', function () {
+  return gulp.src(['node_modules/govuk_template_jinja/assets/images'])
+  .pipe(gulp.dest(config.paths.public + '/govuk_template/assets/'))
+});
+
+gulp.task('copy-elements-sass', function () {
+  return gulp.src(['node_modules/govuk-elements-sass/public/sass/**'])
+  .pipe(gulp.dest(config.paths.govukModules + '/govuk-elements-sass/'))
+});
+
+gulp.task('sass', function () {
+  return gulp.src(config.paths.assets + '/sass/*.scss')
+  .pipe(sourcemaps.init())
+  .pipe(sass({outputStyle: 'expanded',
+    includePaths: ['govuk_modules/govuk_frontend_toolkit/stylesheets',
+      'govuk_modules/govuk_template/assets/stylesheets',
+      'govuk_modules/govuk-elements-sass/']}).on('error', sass.logError))
+  .pipe(sourcemaps.write())
+  .pipe(gulp.dest(config.paths.public + '/stylesheets/'));
+})
+
+gulp.task('sass:watch', function () {
+  gulp.watch('./app/sass/**/*.scss', ['sass']);
+});
+
+gulp.task('default', [
+  'clean',
+  'copy-toolkit',
+  'copy-template',
+  'copy-template-assets',
+  // 'copy-template-assets2',
+  'copy-elements-sass',
+  'sass',
+  'sass:watch'
+  ]);
