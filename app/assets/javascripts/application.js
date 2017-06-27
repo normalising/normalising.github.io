@@ -24,25 +24,15 @@
     handleQueryResponse: function(response){
       var data = response.getDataTable(),
         options = {
-          // 'colors': ['#005EA5', '#B10D1E', '#41BBF9'],
           'chartArea': {
-            // 'width': '80%',
             'height': 800
           },
-          // 'firstRowNumber': 2,
           'height': 900,
           'legend': { 'position': 'top'},
           'isStacked': true,
-          // 'vAxis' : {
-          //   'textStyle' : {
-          //     'fontSize': 10
-          //   }
-          // },
-          // 'hAxis' : {
-          //   'textStyle' : {
-          //     'fontSize': 10
-          //   }
-          // }
+          'hAxis': {
+            'textPosition': 'none',
+          }
         };
 
       var chart = new google.visualization.BarChart(this.$el[0]);
