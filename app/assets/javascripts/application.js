@@ -22,22 +22,44 @@
     },
 
     handleQueryResponse: function(response){
-      var data = response.getDataTable(),
-        options = {
-          'chartArea': {
-            'height': 800
-          },
-          'height': 900,
-          'legend': { 'position': 'top'},
-          'isStacked': true,
-          'hAxis': {
-            'textPosition': 'none',
-          }
-        };
+      var resp = response.getDataTable();
 
-      var chart = new google.visualization.BarChart(this.$el[0]);
-      chart.draw(data, options);
+      for(var i=0; i<resp.getNumberOfRows();i++){
+        var $el = $('<div/>').append('<h2 class="heading-medium">'+resp.getValue(i, 0)+'</h2>').appendTo(this.$el);
+        this.addChart(resp, i, $el);
+      }
+
+    },
+
+    addChart: function(resp, row, $el){
+      for(var i=2; i<resp.getNumberOfColumns();i++){
+        var $el = $('<div/>').addClass('column').appendTo(this.$el);
+
+        var data = new google.visualization.DataTable(),
+          options = {
+            'chartArea': {
+              'height': 300
+            },
+            'enableInteractivity': false,
+            'height': 350,
+            'legend': 'none',
+            'pieHole': 0.6,
+            'slices': {0: {'color': '#005EA5'}, 1: {'color': '#28A197', 'textStyle': {'color': '#28A197'}}},
+            'title': resp.getColumnLabel(i)
+          };
+
+        data.addColumn('string', 'Property');
+        data.addColumn('number', 'Value');
+        data.addRows([
+          [resp.getColumnLabel(i), resp.getValue(row,i)],
+          ['Other', (1 - resp.getValue(row,i))]
+        ]);
+
+        var chart = new google.visualization.PieChart($el[0]);
+        chart.draw(data, options);
+      }
     }
+
   };
 
   Graph.init();

@@ -2,3 +2,15 @@ $path: "/public/images/";
 
 @import 'govuk-elements';
 @import "elements/govuk-template-base";
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+@media screen and (max-width: 960px) {
+  .column {
+    float: none;
+    width: 100%;
+  }
+}
