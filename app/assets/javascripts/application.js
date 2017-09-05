@@ -17,7 +17,7 @@
     },
 
     drawCharts: function() {
-      var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1B37J7fFTokDZ3J3hX4zIm4YhGy5tR6WfKt6RRIfugcE/gviz/tq?gid=0&range=B7:E12');
+      var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1B37J7fFTokDZ3J3hX4zIm4YhGy5tR6WfKt6RRIfugcE/gviz/tq?gid=0&range=B7:F12');
       query.send($.proxy(this.handleQueryResponse, this));
     },
 
@@ -25,15 +25,18 @@
       var resp = response.getDataTable();
 
       for(var i=0; i<resp.getNumberOfRows();i++){
-        var $el = this.$el.find('.js-DiversityCategory').eq(i);
+        var $el = $('<div/>')
+                    .append('<h2 class="heading-medium">'+resp.getValue(i, 0)+'</h2>')
+                    .append('<p>'+resp.getValue(i, 1)+'</p>')
+                    .appendTo(this.$el);
         this.addChart(resp, i, $el);
       }
 
     },
 
     addChart: function(resp, row, $el){
-      for(var i=2; i<resp.getNumberOfColumns();i++){
-        var $graphEl = $('<div/>').addClass('column').appendTo($el);
+      for(var i=3; i<resp.getNumberOfColumns();i++){
+        var $graphEl = $('<div/>').addClass('column').appendTo(this.$el);
 
         var data = new google.visualization.DataTable(),
           options = {
