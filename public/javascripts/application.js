@@ -25,7 +25,7 @@
       var resp = response.getDataTable();
 
       for(var i=0; i<resp.getNumberOfRows();i++){
-        var $el = $('<div/>').append('<h2 class="heading-medium">'+resp.getValue(i, 0)+'</h2>').appendTo(this.$el);
+        var $el = this.$el.find('.js-DiversityCategory').eq(i);
         this.addChart(resp, i, $el);
       }
 
@@ -33,7 +33,7 @@
 
     addChart: function(resp, row, $el){
       for(var i=2; i<resp.getNumberOfColumns();i++){
-        var $el = $('<div/>').addClass('column').appendTo(this.$el);
+        var $graphEl = $('<div/>').addClass('column').appendTo($el);
 
         var data = new google.visualization.DataTable(),
           options = {
@@ -55,7 +55,7 @@
           ['Other', (1 - resp.getValue(row,i))]
         ]);
 
-        var chart = new google.visualization.PieChart($el[0]);
+        var chart = new google.visualization.PieChart($graphEl[0]);
         chart.draw(data, options);
       }
     }
