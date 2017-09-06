@@ -3,12 +3,14 @@
 
   var Graph = {
 
-    el: '.js-Diversity',
+    chartEl: '#js-Chart',
+    introEl: '#js-Intro',
+    footerEl: '#js-Footer',
 
     init: function() {
-      this.$el = $(this.el);
-      this.i18n = this.$el.data('i18n');
-      if(this.$el.length > 0){
+      this.$chartEl = $(this.chartEl);
+      this.i18n = this.$chartEl.data('i18n');
+      if(this.$chartEl.length > 0){
         google.charts.load('current', {
           'packages': ['corechart']
         });
@@ -17,26 +19,42 @@
     },
 
     drawCharts: function() {
-      var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1B37J7fFTokDZ3J3hX4zIm4YhGy5tR6WfKt6RRIfugcE/gviz/tq?gid=0&range=B7:F12');
-      query.send($.proxy(this.handleQueryResponse, this));
+      var intro = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1B37J7fFTokDZ3J3hX4zIm4YhGy5tR6WfKt6RRIfugcE/gviz/tq?gid=0&range=B2');
+      var footer = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1B37J7fFTokDZ3J3hX4zIm4YhGy5tR6WfKt6RRIfugcE/gviz/tq?gid=0&range=B6');
+      var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1B37J7fFTokDZ3J3hX4zIm4YhGy5tR6WfKt6RRIfugcE/gviz/tq?gid=0&range=B9:F14');
+      intro.send($.proxy(this.handleIntroResponse, this));
+      footer.send($.proxy(this.handleFooterResponse, this));
+      query.send($.proxy(this.handleChartResponse, this));
     },
 
-    handleQueryResponse: function(response){
+    handleIntroResponse: function(response){
       var resp = response.getDataTable();
+      $(this.introEl).text(resp.getValue(0, 0));
+    },
 
+    handleFooterResponse: function(response){
+      var resp = response.getDataTable();
+      $(this.footerEl).text(resp.getValue(0, 0));
+    },
+
+    handleChartResponse: function(response){
+      var resp = response.getDataTable();
+      this.addRows(resp);
+    },
+
+    addRows: function(resp) {
       for(var i=0; i<resp.getNumberOfRows();i++){
         var $el = $('<div/>')
                     .append('<h2 class="heading-medium">'+resp.getValue(i, 0)+'</h2>')
                     .append('<p>'+resp.getValue(i, 1)+'</p>')
-                    .appendTo(this.$el);
+                    .appendTo(this.$chartEl);
         this.addChart(resp, i, $el);
       }
-
     },
 
     addChart: function(resp, row, $el){
       for(var i=3; i<resp.getNumberOfColumns();i++){
-        var $graphEl = $('<div/>').addClass('column').appendTo(this.$el);
+        var $graphEl = $('<div/>').addClass('column').appendTo(this.$chartEl);
 
         var data = new google.visualization.DataTable(),
           options = {
