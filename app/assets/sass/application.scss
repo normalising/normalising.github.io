@@ -3,6 +3,14 @@ $path: "/public/images/";
 @import 'govuk-elements';
 @import "elements/govuk-template-base";
 
+#global-header .header-wrapper .header-global .header-content {
+  color: #fff;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0 $gutter-half;
+  width: 75%;
+}
+
 .column {
   float: left;
   width: 50%;
